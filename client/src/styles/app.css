@@ -1,0 +1,23 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #efefef;
+  color: #1f1f23;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.app__main {
+  flex: 1;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 0 40px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .app__main {
+    padding-inline: 12px;
+  }
+}

@@ -1,0 +1,51 @@
+.home-page__banners {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.home-page__banner {
+  position: relative;
+  min-height: 230px;
+  padding: 14px;
+  overflow: hidden;
+  border-radius: 18px;
+  color: #ffffff;
+}
+
+.home-page__banner--warm {
+  background: linear-gradient(160deg, #8f5130, #efb067);
+}
+
+.home-page__banner--dark {
+  background: linear-gradient(160deg, #8a908f, #2d2523 70%);
+}
+
+.home-page__banner--soft {
+  background: linear-gradient(160deg, #ffe9e9, #ffb5c8);
+  color: #ffffff;
+}
+
+.home-page__banner-title {
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: 180px;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.home-page__banner-emoji {
+  position: absolute;
+  right: 18px;
+  bottom: 12px;
+  font-size: 92px;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.14));
+}
+
+@media (max-width: 760px) {
+  .home-page__banners {
+    grid-template-columns: 1fr;
+  }
+}

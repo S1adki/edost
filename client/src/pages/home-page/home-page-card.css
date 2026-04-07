@@ -1,0 +1,127 @@
+.home-page__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.home-page__card {
+  overflow: hidden;
+  border-radius: 18px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.home-page__card-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 138px;
+  border-radius: 16px;
+}
+
+.home-page__card-media--green {
+  background: linear-gradient(135deg, #458851, #79bc7a);
+}
+
+.home-page__card-media--orange {
+  background: linear-gradient(135deg, #d46f2c, #ffbe59);
+}
+
+.home-page__card-media--brown {
+  background: linear-gradient(135deg, #493836, #8b5f4c);
+}
+
+.home-page__card-media--gray {
+  background: linear-gradient(135deg, #9fa7ad, #d8dde1);
+}
+
+.home-page__card-media--red {
+  background: linear-gradient(135deg, #b43d2e, #f0b16b);
+}
+
+.home-page__card-media--cream {
+  background: linear-gradient(135deg, #f0dfbf, #ffffff);
+}
+
+.home-page__card-media--market-green {
+  background: linear-gradient(135deg, #157247, #3dc46d);
+}
+
+.home-page__card-media--market-bright {
+  background: linear-gradient(135deg, #0e9f56, #75e74a);
+}
+
+.home-page__card-media--market-dark {
+  background: linear-gradient(135deg, #0f3921, #1c5637);
+}
+
+.home-page__favorite {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.home-page__card-note {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.home-page__card-emoji {
+  font-size: 88px;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.16));
+}
+
+.home-page__card-body {
+  padding: 8px 2px 0;
+}
+
+.home-page__card-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.home-page__card-subtitle {
+  margin: 4px 0 0;
+  color: #f3fff7;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.home-page__card-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  color: #2f2f2f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.home-page__card-label {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #39cf68;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+@media (max-width: 760px) {
+  .home-page__grid {
+    grid-template-columns: 1fr;
+  }
+}

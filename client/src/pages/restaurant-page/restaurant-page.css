@@ -1,0 +1,44 @@
+.restaurant-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 12px;
+  align-items: start;
+}
+
+.restaurant-page__content,
+.restaurant-page__basket {
+  background: #ffffff;
+  border-radius: 22px;
+}
+
+.restaurant-page__content {
+  padding: 10px;
+}
+
+@media (max-width: 1100px) {
+  .restaurant-page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .restaurant-page__sidebar {
+    position: static;
+  }
+
+  .restaurant-page__courier {
+    height: 220px;
+  }
+}
+
+@media (max-width: 760px) {
+  .restaurant-page__hero {
+    flex-direction: column;
+  }
+
+  .restaurant-page__title {
+    font-size: 24px;
+  }
+
+  .restaurant-page__category {
+    font-size: 14px;
+  }
+}

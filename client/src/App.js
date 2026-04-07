@@ -1,20 +1,33 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./components/AppRouter";
-import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
-import "./App.css";
+import SiteHeader from "./components/site-header";
+import SiteFooter from "./components/site-footer";
+import { AuthContext } from "./context/AuthContext";
+import "./styles/app.css";
 
 const App = () => {
+  const [authState] = useState({
+    isAuth: false,
+    user: {
+      email: "",
+      name: "",
+    },
+  });
+
+  const authValue = useMemo(() => authState, [authState]);
+
   return (
     <BrowserRouter>
-      <div className="app">
-        <NavBar />
-        <main className="app-main">
-          <AppRouter />
-        </main>
-        <Footer />
-      </div>
+      <AuthContext.Provider value={authValue}>
+        <div className="app">
+          <SiteHeader />
+          <main className="app__main">
+            <AppRouter />
+          </main>
+          <SiteFooter />
+        </div>
+      </AuthContext.Provider>
     </BrowserRouter>
   );
 };
