@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { PROFILE_ROUTE, SHOP_ROUTE } from "../../utils/consts";
+import { LOGIN_ROUTE, PROFILE_ROUTE, SHOP_ROUTE } from "../../utils/consts";
 import "./site-header.css";
 
 const SiteHeader = () => {
@@ -10,6 +10,8 @@ const SiteHeader = () => {
   const location = useLocation();
 
   const profileInitial = isAuth ? user.email?.[0]?.toUpperCase() || "П" : "П";
+  const profileRoute = isAuth ? PROFILE_ROUTE : LOGIN_ROUTE;
+  const profileLabel = isAuth ? "Профиль" : "Войти";
 
   return (
     <header className="site-header">
@@ -48,17 +50,17 @@ const SiteHeader = () => {
 
         <button
           className={`site-header__profile${
-            location.pathname === PROFILE_ROUTE
+            location.pathname === profileRoute
               ? " site-header__profile--active"
               : ""
           }`}
           type="button"
-          onClick={() => navigate(PROFILE_ROUTE)}
+          onClick={() => navigate(profileRoute)}
         >
           <span className="site-header__profile-avatar" aria-hidden="true">
             {profileInitial}
           </span>
-          <span className="site-header__profile-text">Профиль</span>
+          <span className="site-header__profile-text">{profileLabel}</span>
         </button>
       </div>
     </header>

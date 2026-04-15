@@ -1,0 +1,43 @@
+.auth-page__form {
+  display: grid;
+  gap: 16px;
+  width: min(100%, 420px);
+  margin: 0 auto;
+}
+
+.auth-page__field {
+  display: grid;
+  gap: 8px;
+}
+
+.auth-page__label {
+  color: #463f57;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.auth-page__input {
+  width: 100%;
+  min-height: 54px;
+  border: 1px solid #ddd6eb;
+  border-radius: 16px;
+  padding: 0 16px;
+  background: #fbfafe;
+  color: #171322;
+}
+
+.auth-page__input::placeholder {
+  color: #9d96ae;
+}
+
+.auth-page__submit {
+  min-height: 54px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #ff7a00, #a006ff);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}

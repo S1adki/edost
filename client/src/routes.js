@@ -1,5 +1,5 @@
 import Admin from "./pages/Admin";
-import Auth from "./pages/Auth";
+import AuthPage from "./pages/auth-page";
 import Basket from "./pages/Basket";
 import HomePage from "./pages/home-page";
 import ProfilePage from "./pages/profile-page";
@@ -40,11 +40,11 @@ export const publicRoutes = [
   },
   {
     path: LOGIN_ROUTE,
-    Component: Auth,
+    Component: AuthPage,
   },
   {
     path: REGISTRATION_ROUTE,
-    Component: Auth,
+    Component: AuthPage,
   },
   {
     path: `${FOOD_ROUTE}/:id`,
