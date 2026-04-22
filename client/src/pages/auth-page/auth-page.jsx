@@ -2,6 +2,12 @@ import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import {
+  findUserByCredentials,
+  findUserByEmail,
+  isValidEmail,
+  registerUser,
+} from "../../utils/auth-storage";
+import {
   LOGIN_ROUTE,
   PROFILE_ROUTE,
   REGISTRATION_ROUTE,
@@ -26,8 +32,10 @@ const AuthPage = () => {
     password: "",
     confirmPassword: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (field) => (event) => {
+    setErrorMessage("");
     setForm((current) => ({
       ...current,
       [field]: event.target.value,
@@ -36,10 +44,58 @@ const AuthPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    login({
-      name: form.name || "Пользователь",
-      email: form.email,
-    });
+
+    if (!isValidEmail(form.email)) {
+      setErrorMessage("Введите корректный e-mail.");
+      return;
+    }
+
+    if (form.password.trim().length < 6) {
+      setErrorMessage("Пароль должен быть не короче 6 символов.");
+      return;
+    }
+
+    if (isRegistration) {
+      if (form.name.trim().length < 2) {
+        setErrorMessage("Введите имя не короче 2 символов.");
+        return;
+      }
+
+      if (form.password !== form.confirmPassword) {
+        setErrorMessage("Пароли не совпадают.");
+        return;
+      }
+
+      if (findUserByEmail(form.email)) {
+        setErrorMessage("Пользователь с таким e-mail уже зарегистрирован.");
+        return;
+      }
+
+      const nextUser = {
+        accountEmail: form.email.trim(),
+        name: form.name.trim(),
+        email: form.email.trim(),
+        password: form.password,
+        phone: "",
+        address: "",
+        birthDate: "",
+        gender: "male",
+      };
+
+      registerUser(nextUser);
+      login(nextUser);
+      navigate(PROFILE_ROUTE);
+      return;
+    }
+
+    const existingUser = findUserByCredentials(form.email, form.password);
+
+    if (!existingUser) {
+      setErrorMessage("Неверный логин или пароль.");
+      return;
+    }
+
+    login(existingUser);
     navigate(PROFILE_ROUTE);
   };
 
@@ -154,6 +210,12 @@ const AuthPage = () => {
           <button className="auth-page__submit" type="submit">
             {content.submitText}
           </button>
+
+          {errorMessage ? (
+            <p className="auth-page__message auth-page__message--error">
+              {errorMessage}
+            </p>
+          ) : null}
         </form>
 
         <p className="auth-page__secondary">

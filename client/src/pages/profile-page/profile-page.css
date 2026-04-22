@@ -126,6 +126,24 @@
   font-size: 18px;
 }
 
+.profile-page__message {
+  margin: 12px 0 0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.profile-page__message--error {
+  background: #ffe9ec;
+  color: #b4233a;
+}
+
+.profile-page__message--success {
+  background: #e6f8eb;
+  color: #16753a;
+}
+
 @media (max-width: 760px) {
   .profile-page__card {
     padding-top: 54px;

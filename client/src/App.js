@@ -4,13 +4,18 @@ import AppRouter from "./components/AppRouter";
 import SiteHeader from "./components/site-header";
 import SiteFooter from "./components/site-footer";
 import { AuthContext } from "./context/AuthContext";
+import {
+  clearSession,
+  getSavedSession,
+  saveSession,
+  updateRegisteredUser,
+} from "./utils/auth-storage";
 import "./styles/app.css";
-
-const AUTH_STORAGE_KEY = "edostavka-auth";
 
 const initialAuthState = {
   isAuth: false,
   user: {
+    accountEmail: "",
     name: "",
     email: "",
     phone: "",
@@ -21,33 +26,27 @@ const initialAuthState = {
 };
 
 const App = () => {
-  const [authState, setAuthState] = useState(() => {
-    const savedAuthState = localStorage.getItem(AUTH_STORAGE_KEY);
-
-    if (!savedAuthState) {
-      return initialAuthState;
-    }
-
-    try {
-      return JSON.parse(savedAuthState);
-    } catch (error) {
-      return initialAuthState;
-    }
-  });
+  const [authState, setAuthState] = useState(() => getSavedSession() || initialAuthState);
 
   useEffect(() => {
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
+    if (authState.isAuth) {
+      saveSession(authState);
+      return;
+    }
+
+    clearSession();
   }, [authState]);
 
   const authValue = useMemo(
     () => ({
       ...authState,
       login: (userData) => {
+        const { password, ...safeUserData } = userData;
         setAuthState({
           isAuth: true,
           user: {
             ...initialAuthState.user,
-            ...userData,
+            ...safeUserData,
           },
         });
       },
@@ -57,11 +56,16 @@ const App = () => {
       updateUser: (userData) => {
         setAuthState((current) => ({
           ...current,
-          user: {
-            ...current.user,
-            ...userData,
-          },
-        }));
+          user: (() => {
+            const nextUser = {
+              ...current.user,
+              ...userData,
+            };
+
+            updateRegisteredUser(current.user.accountEmail, nextUser);
+            return nextUser;
+          })(),
+        }))
       },
     }),
     [authState]

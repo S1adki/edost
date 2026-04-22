@@ -41,3 +41,16 @@
   font-weight: 800;
   cursor: pointer;
 }
+
+.auth-page__message {
+  margin: 0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.auth-page__message--error {
+  background: #ffe9ec;
+  color: #b4233a;
+}

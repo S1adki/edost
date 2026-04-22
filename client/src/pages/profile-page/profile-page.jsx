@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { LOGIN_ROUTE, SHOP_ROUTE } from "../../utils/consts";
+import { findUserByEmail, isValidEmail } from "../../utils/auth-storage";
 import {
   genderOptions,
   initialProfileForm,
@@ -20,6 +21,8 @@ const ProfilePage = () => {
     ...user,
     fullName: user.name || "",
   }));
+  const [saveMessage, setSaveMessage] = useState("");
+  const [saveError, setSaveError] = useState("");
 
   useEffect(() => {
     setForm({
@@ -36,6 +39,8 @@ const ProfilePage = () => {
   }, [isAuth, navigate]);
 
   const handleChange = (field) => (event) => {
+    setSaveMessage("");
+    setSaveError("");
     setForm((current) => ({
       ...current,
       [field]: event.target.value,
@@ -43,6 +48,8 @@ const ProfilePage = () => {
   };
 
   const handleGenderSelect = (value) => {
+    setSaveMessage("");
+    setSaveError("");
     setForm((current) => ({
       ...current,
       gender: value,
@@ -94,7 +101,28 @@ const ProfilePage = () => {
             className="profile-page__form"
             onSubmit={(event) => {
               event.preventDefault();
+              if (form.fullName.trim().length < 2) {
+                setSaveError("ФИО должно быть не короче 2 символов.");
+                return;
+              }
+
+              if (!isValidEmail(form.email)) {
+                setSaveError("Введите корректный e-mail.");
+                return;
+              }
+
+              const existingUser = findUserByEmail(form.email);
+
+              if (
+                existingUser &&
+                existingUser.email.toLowerCase() !== user.accountEmail.toLowerCase()
+              ) {
+                setSaveError("Этот e-mail уже используется другим аккаунтом.");
+                return;
+              }
+
               updateUser({
+                accountEmail: form.email,
                 name: form.fullName,
                 email: form.email,
                 phone: form.phone,
@@ -102,6 +130,8 @@ const ProfilePage = () => {
                 birthDate: form.birthDate,
                 gender: form.gender,
               });
+              setSaveError("");
+              setSaveMessage("Данные профиля сохранены.");
             }}
           >
             <input
@@ -166,6 +196,18 @@ const ProfilePage = () => {
             <button className="profile-page__submit" type="submit">
               Сохранить
             </button>
+
+            {saveError ? (
+              <p className="profile-page__message profile-page__message--error">
+                {saveError}
+              </p>
+            ) : null}
+
+            {saveMessage ? (
+              <p className="profile-page__message profile-page__message--success">
+                {saveMessage}
+              </p>
+            ) : null}
           </form>
         ) : (
           <section className="profile-page__orders">
