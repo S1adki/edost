@@ -5,7 +5,9 @@ import {
   homeBanners,
   homeCategories,
   homeMarkets,
+  homeProducts,
   homeRestaurants,
+  homeSortOptions,
 } from "./home-page.data";
 import "./home-page.css";
 import "./home-page-banner.css";
@@ -45,6 +47,9 @@ const HomeCard = ({ item, onClick, isMarket = false }) => {
           <span>✦ {item.rating}</span>
           <span>{item.time}</span>
         </div>
+        {item.price ? (
+          <div className="home-page__card-price">{item.price}</div>
+        ) : null}
         {item.label ? (
           <span className="home-page__card-label">{item.label}</span>
         ) : isMarket ? null : null}
@@ -53,9 +58,58 @@ const HomeCard = ({ item, onClick, isMarket = false }) => {
   );
 };
 
+const ProductCard = ({ product }) => {
+  return (
+    <article className="home-page__product-card">
+      <div
+        className={`home-page__product-media home-page__product-media--${product.accent}`}
+      >
+        <span className="home-page__product-emoji" aria-hidden="true">
+          {product.emoji}
+        </span>
+      </div>
+
+      <div className="home-page__product-body">
+        <span className="home-page__product-vendor">{product.vendor}</span>
+        <h3 className="home-page__product-title">{product.title}</h3>
+        <p className="home-page__product-weight">{product.weight}</p>
+        <div className="home-page__product-footer">
+          <strong>{product.price} ₽</strong>
+          {product.oldPrice ? <span>{product.oldPrice} ₽</span> : null}
+          <button className="home-page__product-button" type="button" aria-label="Добавить">
+            +
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+};
+
 const HomePage = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState(homeCategories[0]);
+  const [activeSort, setActiveSort] = useState(homeSortOptions[0].id);
+  const filteredRestaurants =
+    activeCategory === "Все"
+      ? homeRestaurants
+      : homeRestaurants.filter((restaurant) =>
+          restaurant.categories.includes(activeCategory)
+        );
+  const visibleRestaurants = [...filteredRestaurants].sort((first, second) => {
+    if (activeSort === "fast") {
+      return first.deliveryMinutes - second.deliveryMinutes;
+    }
+
+    if (activeSort === "cheap") {
+      return first.minPrice - second.minPrice;
+    }
+
+    if (activeSort === "rating") {
+      return second.ratingValue - first.ratingValue;
+    }
+
+    return 0;
+  });
 
   const goToRestaurant = (id) => {
     navigate(`${FOOD_ROUTE}/${id}`);
@@ -95,20 +149,37 @@ const HomePage = () => {
               </button>
             ))}
 
-            <button className="home-page__filter home-page__filter--sort" type="button">
-              ⇅ Сортировка
-            </button>
+            <div className="home-page__sort" aria-label="Сортировка ресторанов">
+              {homeSortOptions.map((option) => (
+                <button
+                  key={option.id}
+                  className={`home-page__sort-button${
+                    activeSort === option.id ? " home-page__sort-button--active" : ""
+                  }`}
+                  type="button"
+                  onClick={() => setActiveSort(option.id)}
+                >
+                  {option.title}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="home-page__grid">
-            {homeRestaurants.map((item) => (
-              <HomeCard
-                key={item.id}
-                item={item}
-                onClick={() => goToRestaurant(item.id)}
-              />
-            ))}
-          </div>
+          {visibleRestaurants.length > 0 ? (
+            <div className="home-page__grid">
+              {visibleRestaurants.map((item) => (
+                <HomeCard
+                  key={item.id}
+                  item={item}
+                  onClick={() => goToRestaurant(item.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="home-page__empty">
+              В этой категории пока нет заведений
+            </p>
+          )}
         </section>
 
         <section className="home-page__section">
@@ -122,6 +193,16 @@ const HomePage = () => {
                 isMarket
                 onClick={() => goToRestaurant(item.id)}
               />
+            ))}
+          </div>
+        </section>
+
+        <section className="home-page__section">
+          <h2 className="home-page__section-title">Популярные товары</h2>
+
+          <div className="home-page__products-grid">
+            {homeProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </section>
