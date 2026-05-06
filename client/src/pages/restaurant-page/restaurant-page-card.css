@@ -94,6 +94,20 @@
   font-size: 14px;
 }
 
+.restaurant-page__product-description {
+  margin: 6px 0 0;
+  color: #4f4f4f;
+  font-size: 13px;
+  line-height: 1.35;
+  min-height: 34px;
+}
+
+.restaurant-page__product-details {
+  margin: 6px 0 0;
+  color: #9a9a9a;
+  font-size: 12px;
+}
+
 @media (max-width: 760px) {
   .restaurant-page__products {
     grid-template-columns: 1fr;
