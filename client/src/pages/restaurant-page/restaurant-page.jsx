@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import CartSidebar from "../../components/cart-sidebar/cart-sidebar";
+import { useCart } from "../../context/CartContext";
+import { useFavorites } from "../../context/FavoritesContext";
 import { SHOP_ROUTE } from "../../utils/consts";
 import { restaurantCatalog } from "./restaurant-catalog.data";
 import { getRestaurantPageData } from "./restaurant-page.data";
@@ -66,7 +69,19 @@ const filterProductsByCategory = (products, activeCategory) => {
   });
 };
 
-const RestaurantCard = ({ product }) => {
+const RestaurantCard = ({ product, restaurantId, restaurantTitle }) => {
+  const { addItem } = useCart();
+
+  const handleAdd = () => {
+    addItem({
+      id: `restaurant-${restaurantId}-${product.id}`,
+      title: product.title,
+      price: product.price,
+      emoji: product.emoji,
+      vendor: restaurantTitle,
+    });
+  };
+
   return (
     <article className="restaurant-page__product-card">
       <div
@@ -86,6 +101,13 @@ const RestaurantCard = ({ product }) => {
         <p className="restaurant-page__product-meta">{product.meta}</p>
         <p className="restaurant-page__product-description">{product.description}</p>
         <p className="restaurant-page__product-details">{product.details}</p>
+        <button
+          className="restaurant-page__add-button"
+          type="button"
+          onClick={handleAdd}
+        >
+          В корзину
+        </button>
       </div>
     </article>
   );
@@ -94,9 +116,12 @@ const RestaurantCard = ({ product }) => {
 const RestaurantPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const restaurantId = Number(id);
   const { categories, featuredProducts, promoProducts } = getRestaurantPageData(id);
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const currentRestaurant = restaurantCatalog[id] || restaurantCatalog[1];
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorite = isFavorite(restaurantId);
 
   useEffect(() => {
     setActiveCategory(categories[0]);
@@ -128,7 +153,16 @@ const RestaurantPage = () => {
             <div>
               <h1 className="restaurant-page__title">
                 {currentRestaurant.title}{" "}
-                <span className="restaurant-page__favorite">♡</span>
+                <button
+                  className={`restaurant-page__favorite${
+                    favorite ? " restaurant-page__favorite--active" : ""
+                  }`}
+                  type="button"
+                  aria-label={favorite ? "Убрать из избранного" : "В избранное"}
+                  onClick={() => toggleFavorite(restaurantId)}
+                >
+                  {favorite ? "♥" : "♡"}
+                </button>
               </h1>
               <p className="restaurant-page__subtitle">
                 {currentRestaurant.subtitle}
@@ -167,7 +201,12 @@ const RestaurantPage = () => {
 
         <section className="restaurant-page__products">
           {filteredFeaturedProducts.map((product) => (
-            <RestaurantCard key={product.id} product={product} />
+            <RestaurantCard
+              key={product.id}
+              product={product}
+              restaurantId={restaurantId}
+              restaurantTitle={currentRestaurant.title}
+            />
           ))}
         </section>
 
@@ -176,29 +215,18 @@ const RestaurantPage = () => {
 
           <div className="restaurant-page__products restaurant-page__products--secondary">
             {filteredPromoProducts.map((product) => (
-              <RestaurantCard key={product.id} product={product} />
+              <RestaurantCard
+                key={product.id}
+                product={product}
+                restaurantId={restaurantId}
+                restaurantTitle={currentRestaurant.title}
+              />
             ))}
           </div>
         </section>
       </section>
 
-      <aside className="restaurant-page__sidebar">
-        <div className="restaurant-page__basket">
-          <h2 className="restaurant-page__basket-title">Доставка от 15 минут</h2>
-
-          <div className="restaurant-page__courier" aria-hidden="true">
-            <div className="restaurant-page__courier-head" />
-            <div className="restaurant-page__courier-body">
-              <span className="restaurant-page__courier-box restaurant-page__courier-box--top" />
-              <span className="restaurant-page__courier-box restaurant-page__courier-box--bottom" />
-            </div>
-          </div>
-
-          <button className="restaurant-page__basket-button" type="button">
-            Добавьте что нибудь
-          </button>
-        </div>
-      </aside>
+      <CartSidebar />
     </div>
   );
 };

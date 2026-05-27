@@ -3,7 +3,12 @@ import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import SiteHeader from "./components/site-header";
 import SiteFooter from "./components/site-footer";
+import Toast from "./components/toast/toast";
 import { AuthContext } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
+import { FavoritesProvider } from "./context/FavoritesContext";
+import { SearchProvider } from "./context/SearchContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import {
   clearSession,
   getSavedSession,
@@ -73,15 +78,24 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <AuthContext.Provider value={authValue}>
-        <div className="app">
-          <SiteHeader />
-          <main className="app__main">
-            <AppRouter />
-          </main>
-          <SiteFooter />
-        </div>
-      </AuthContext.Provider>
+      <ThemeProvider>
+        <SearchProvider>
+          <CartProvider>
+            <FavoritesProvider>
+              <AuthContext.Provider value={authValue}>
+                <div className="app">
+                  <SiteHeader />
+                  <main className="app__main">
+                    <AppRouter />
+                  </main>
+                  <SiteFooter />
+                  <Toast />
+                </div>
+              </AuthContext.Provider>
+            </FavoritesProvider>
+          </CartProvider>
+        </SearchProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 };

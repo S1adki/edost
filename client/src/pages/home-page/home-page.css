@@ -7,7 +7,7 @@
 
 .home-page__content {
   padding: 10px;
-  background: #ffffff;
+  background: var(--surface, #ffffff);
   border-radius: 22px;
 }
 
@@ -15,10 +15,34 @@
   margin-top: 12px;
 }
 
+.home-page__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
 .home-page__section-title {
-  margin: 0 0 8px;
+  margin: 0;
   font-size: 27px;
   font-weight: 800;
+}
+
+.home-page__favorites-toggle {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--bg-muted, #e8e8e8);
+  color: var(--text, #242424);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.home-page__favorites-toggle--active {
+  background: #ffe0ef;
+  color: #c2185b;
 }
 
 .home-page__filters {

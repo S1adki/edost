@@ -35,6 +35,10 @@ export const publicRoutes = [
     Component: HomePage,
   },
   {
+    path: BASKET_ROUTE,
+    Component: Basket,
+  },
+  {
     path: PROFILE_ROUTE,
     Component: ProfilePage,
   },

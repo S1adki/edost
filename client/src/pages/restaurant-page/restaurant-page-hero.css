@@ -34,8 +34,18 @@
 }
 
 .restaurant-page__favorite {
-  color: #ff5d71;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #cccccc;
+  font-size: 24px;
   font-weight: 700;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.restaurant-page__favorite--active {
+  color: #ff4d8d;
 }
 
 .restaurant-page__subtitle {

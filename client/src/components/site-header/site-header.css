@@ -1,6 +1,6 @@
 .site-header {
   padding: 12px 0 10px;
-  background: #f1f1f1;
+  background: var(--header-bg, #f1f1f1);
 }
 
 .site-header__inner {
@@ -8,16 +8,17 @@
   margin: 0 auto;
   padding: 8px 14px;
   display: grid;
-  grid-template-columns: auto minmax(220px, 1fr) auto auto auto;
+  grid-template-columns: auto minmax(220px, 1fr) auto auto auto auto;
   align-items: center;
   gap: 12px;
-  background: #ffffff;
+  background: var(--surface, #ffffff);
   border-radius: 20px;
 }
 
 .site-header__logo,
 .site-header__address,
-.site-header__time,
+.site-header__basket,
+.site-header__theme,
 .site-header__profile {
   border: 0;
   cursor: pointer;
@@ -38,7 +39,7 @@
   gap: 10px;
   min-height: 44px;
   padding: 0 14px;
-  background: #e8e8e8;
+  background: var(--bg-muted, #e8e8e8);
   border-radius: 18px;
 }
 
@@ -52,7 +53,7 @@
   border: 0;
   outline: 0;
   background: transparent;
-  color: #232323;
+  color: var(--text, #232323);
   font-size: 14px;
 }
 
@@ -66,11 +67,46 @@
   gap: 10px;
   min-height: 44px;
   padding: 0 14px;
-  background: #ededed;
+  background: var(--bg-muted, #ededed);
   border-radius: 16px;
-  color: #333333;
+  color: var(--text, #333333);
   font-size: 14px;
   font-weight: 500;
+}
+
+.site-header__basket,
+.site-header__theme {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+  background: var(--bg-muted, #ededed);
+  border-radius: 16px;
+  font-size: 18px;
+}
+
+.site-header__basket--active,
+.site-header__basket:hover {
+  background: #e5dbff;
+}
+
+.site-header__basket-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: #8e18ff;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
 }
 
 .site-header__address-icon {
@@ -78,13 +114,12 @@
   line-height: 1;
 }
 
-.site-header__time,
 .site-header__profile {
   min-height: 44px;
   padding: 0 16px;
-  background: #ededed;
+  background: var(--bg-muted, #ededed);
   border-radius: 16px;
-  color: #444444;
+  color: var(--text, #444444);
   font-size: 14px;
   font-weight: 500;
 }
@@ -138,7 +173,8 @@
   }
 
   .site-header__address,
-  .site-header__time,
+  .site-header__basket,
+  .site-header__theme,
   .site-header__profile {
     min-width: 0;
     justify-content: center;

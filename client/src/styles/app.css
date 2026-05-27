@@ -1,10 +1,32 @@
+:root,
+[data-theme="light"] {
+  --bg: #efefef;
+  --bg-muted: #e8e8e8;
+  --surface: #ffffff;
+  --border: #ececec;
+  --text: #1f1f23;
+  --text-muted: #666666;
+  --header-bg: #f1f1f1;
+}
+
+[data-theme="dark"] {
+  --bg: #141418;
+  --bg-muted: #1e1e24;
+  --surface: #1f1f26;
+  --border: #2e2e38;
+  --text: #f0f0f5;
+  --text-muted: #a0a0b0;
+  --header-bg: #141418;
+}
+
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #efefef;
-  color: #1f1f23;
+  background: var(--bg);
+  color: var(--text);
   font-family: "Segoe UI", Arial, sans-serif;
+  transition: background 0.2s, color 0.2s;
 }
 
 .app__main {
