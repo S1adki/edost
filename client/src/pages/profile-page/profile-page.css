@@ -112,6 +112,35 @@
   font-weight: 800;
 }
 
+.profile-page__order-status--active {
+  background: #f3ebff;
+  color: #6d13c9;
+}
+
+.profile-page__order-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-page__repeat-button {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: #8e18ff;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-page__orders-empty {
+  margin: 40px 0 0;
+  text-align: center;
+  color: #655f71;
+  font-size: 16px;
+}
+
 .profile-page__order-items {
   margin-top: 16px;
   font-size: 15px;

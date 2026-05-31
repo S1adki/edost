@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
+import { deliveryTimeOptions, useDelivery } from "../../context/DeliveryContext";
 import { useSearch } from "../../context/SearchContext";
 import { useTheme } from "../../context/ThemeContext";
 import { BASKET_ROUTE, LOGIN_ROUTE, PROFILE_ROUTE, SHOP_ROUTE } from "../../utils/consts";
@@ -12,8 +13,11 @@ const SiteHeader = () => {
   const { query, setQuery } = useSearch();
   const { totalCount } = useCart();
   const { isDark, toggleTheme } = useTheme();
+  const { address, selectedTime, setTimeId, openAddressModal } = useDelivery();
   const navigate = useNavigate();
   const location = useLocation();
+  const [timeOpen, setTimeOpen] = useState(false);
+  const timeRef = useRef(null);
 
   const profileInitial = isAuth ? user.email?.[0]?.toUpperCase() || "П" : "П";
   const profileRoute = isAuth ? PROFILE_ROUTE : LOGIN_ROUTE;
@@ -43,14 +47,53 @@ const SiteHeader = () => {
           />
         </label>
 
-        <button className="site-header__address" type="button">
+        <button
+          className="site-header__address"
+          type="button"
+          onClick={openAddressModal}
+        >
           <span className="site-header__address-icon" aria-hidden="true">
             ⌂
           </span>
-          <span className="site-header__address-text">
-            Москва, улица Воздвиженка, 3/5
-          </span>
+          <span className="site-header__address-text">{address}</span>
         </button>
+
+        <div className="site-header__time-wrap" ref={timeRef}>
+          <button
+            className="site-header__time"
+            type="button"
+            onClick={() => setTimeOpen((current) => !current)}
+            aria-expanded={timeOpen}
+            aria-haspopup="listbox"
+          >
+            {selectedTime.label}
+          </button>
+          {timeOpen ? (
+            <ul className="site-header__time-menu" role="listbox">
+              {deliveryTimeOptions.map((option) => (
+                <li key={option.id}>
+                  <button
+                    className={`site-header__time-option${
+                      selectedTime.id === option.id
+                        ? " site-header__time-option--active"
+                        : ""
+                    }`}
+                    type="button"
+                    role="option"
+                    aria-selected={selectedTime.id === option.id}
+                    onClick={() => {
+                      setTimeId(option.id);
+                      setTimeOpen(false);
+                    }}
+                  >
+                    <span>{option.label}</span>
+                    <span className="site-header__time-eta">{option.eta}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
 
         <button
           className={`site-header__basket${

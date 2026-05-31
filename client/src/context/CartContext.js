@@ -28,19 +28,46 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   const addItem = useCallback(
-    (product) => {
+    (product, options = {}) => {
       setItems((current) => {
         const existing = current.find((item) => item.id === product.id);
         if (existing) {
           return current.map((item) =>
             item.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
+              ? { ...item, quantity: item.quantity + (product.quantity || 1) }
               : item
           );
         }
-        return [...current, { ...product, quantity: 1 }];
+        return [...current, { ...product, quantity: product.quantity || 1 }];
       });
-      showToast(`${product.title} добавлен в корзину`);
+      if (!options.silent) {
+        showToast(`${product.title} добавлен в корзину`);
+      }
+    },
+    [showToast]
+  );
+
+  const addItems = useCallback(
+    (products, options = {}) => {
+      setItems((current) => {
+        let next = [...current];
+        products.forEach((product) => {
+          const existing = next.find((item) => item.id === product.id);
+          if (existing) {
+            next = next.map((item) =>
+              item.id === product.id
+                ? { ...item, quantity: item.quantity + product.quantity }
+                : item
+            );
+          } else {
+            next.push({ ...product });
+          }
+        });
+        return next;
+      });
+      if (!options.silent) {
+        showToast("Заказ добавлен в корзину");
+      }
     },
     [showToast]
   );
@@ -78,11 +105,12 @@ export const CartProvider = ({ children }) => {
       totalCount,
       totalPrice,
       addItem,
+      addItems,
       removeItem,
       updateQuantity,
       clearCart,
     }),
-    [items, toast, totalCount, totalPrice, addItem, removeItem, updateQuantity, clearCart]
+    [items, toast, totalCount, totalPrice, addItem, addItems, removeItem, updateQuantity, clearCart]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { LOGIN_ROUTE, SHOP_ROUTE } from "../../utils/consts";
+import { useCart } from "../../context/CartContext";
+import { useOrders } from "../../context/OrdersContext";
+import { BASKET_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from "../../utils/consts";
 import { findUserByEmail, isValidEmail } from "../../utils/auth-storage";
 import {
   genderOptions,
@@ -14,6 +16,8 @@ import "./profile-page-form.css";
 
 const ProfilePage = () => {
   const { isAuth, logout, user, updateUser } = useContext(AuthContext);
+  const { orders } = useOrders();
+  const { addItems } = useCart();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(profileTabs[0]);
   const [form, setForm] = useState(() => ({
@@ -54,6 +58,16 @@ const ProfilePage = () => {
       ...current,
       gender: value,
     }));
+  };
+
+  const allOrders = [...orders, ...profileOrders];
+
+  const handleRepeatOrder = (order) => {
+    if (!order.itemsData?.length) {
+      return;
+    }
+    addItems(order.itemsData);
+    navigate(BASKET_ROUTE);
   };
 
   return (
@@ -211,24 +225,51 @@ const ProfilePage = () => {
           </form>
         ) : (
           <section className="profile-page__orders">
-            {profileOrders.map((order) => (
-              <article key={order.id} className="profile-page__order-card">
-                <div className="profile-page__order-head">
-                  <div>
-                    <h2 className="profile-page__order-title">{order.title}</h2>
-                    <p className="profile-page__order-date">{order.date}</p>
+            {allOrders.length === 0 ? (
+              <p className="profile-page__orders-empty">
+                У вас пока нет заказов
+              </p>
+            ) : (
+              allOrders.map((order) => (
+                <article key={order.id} className="profile-page__order-card">
+                  <div className="profile-page__order-head">
+                    <div>
+                      <h2 className="profile-page__order-title">{order.title}</h2>
+                      <p className="profile-page__order-date">{order.date}</p>
+                    </div>
+                    <span
+                      className={`profile-page__order-status${
+                        order.status === "В пути"
+                          ? " profile-page__order-status--active"
+                          : ""
+                      }`}
+                    >
+                      {order.status}
+                    </span>
                   </div>
-                  <span className="profile-page__order-status">{order.status}</span>
-                </div>
 
-                <p className="profile-page__order-items">{order.items}</p>
+                  <p className="profile-page__order-items">
+                    {order.items || order.itemsText}
+                  </p>
 
-                <div className="profile-page__order-footer">
-                  <span className="profile-page__order-id">Заказ {order.id}</span>
-                  <strong className="profile-page__order-total">{order.total}</strong>
-                </div>
-              </article>
-            ))}
+                  <div className="profile-page__order-footer">
+                    <span className="profile-page__order-id">Заказ {order.id}</span>
+                    <div className="profile-page__order-actions">
+                      {order.itemsData?.length ? (
+                        <button
+                          className="profile-page__repeat-button"
+                          type="button"
+                          onClick={() => handleRepeatOrder(order)}
+                        >
+                          Повторить
+                        </button>
+                      ) : null}
+                      <strong className="profile-page__order-total">{order.total}</strong>
+                    </div>
+                  </div>
+                </article>
+              ))
+            )}
           </section>
         )}
       </div>

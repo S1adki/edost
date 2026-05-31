@@ -16,6 +16,38 @@
   font-weight: 800;
 }
 
+.cart-sidebar__progress {
+  margin: 10px 0;
+}
+
+.cart-sidebar__progress-bar {
+  height: 5px;
+  background: var(--bg-muted, #efefef);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cart-sidebar__progress-bar span {
+  display: block;
+  height: 100%;
+  background: #8e18ff;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.cart-sidebar__progress-text {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--text-muted, #666666);
+}
+
+.cart-sidebar__free {
+  margin: 10px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #27ae60;
+}
+
 .cart-sidebar__list {
   margin: 12px 0;
   padding: 0;

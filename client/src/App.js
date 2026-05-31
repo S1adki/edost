@@ -4,9 +4,12 @@ import AppRouter from "./components/AppRouter";
 import SiteHeader from "./components/site-header";
 import SiteFooter from "./components/site-footer";
 import Toast from "./components/toast/toast";
+import AddressModal from "./components/address-modal/address-modal";
 import { AuthContext } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import { DeliveryProvider } from "./context/DeliveryContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
+import { OrdersProvider } from "./context/OrdersContext";
 import { SearchProvider } from "./context/SearchContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import {
@@ -80,20 +83,25 @@ const App = () => {
     <BrowserRouter>
       <ThemeProvider>
         <SearchProvider>
-          <CartProvider>
-            <FavoritesProvider>
-              <AuthContext.Provider value={authValue}>
-                <div className="app">
-                  <SiteHeader />
-                  <main className="app__main">
-                    <AppRouter />
-                  </main>
-                  <SiteFooter />
-                  <Toast />
-                </div>
-              </AuthContext.Provider>
-            </FavoritesProvider>
-          </CartProvider>
+          <DeliveryProvider>
+            <OrdersProvider>
+              <CartProvider>
+                <FavoritesProvider>
+                  <AuthContext.Provider value={authValue}>
+                    <div className="app">
+                      <SiteHeader />
+                      <main className="app__main">
+                        <AppRouter />
+                      </main>
+                      <SiteFooter />
+                      <Toast />
+                      <AddressModal />
+                    </div>
+                  </AuthContext.Provider>
+                </FavoritesProvider>
+              </CartProvider>
+            </OrdersProvider>
+          </DeliveryProvider>
         </SearchProvider>
       </ThemeProvider>
     </BrowserRouter>
